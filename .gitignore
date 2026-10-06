@@ -6,3 +6,4 @@ private/employee_notes.txt
 backups/vulnhub.sql.bak
 submission.txt
 .venv/
+.DS_Store
