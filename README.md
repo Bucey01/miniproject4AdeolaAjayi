@@ -105,3 +105,33 @@ flag counts only if your report's PoC shows the exploit that produced it.
 Testing systems you are not authorized to test is an academic-honesty and
 conduct violation. **Only** this app, running on **your** machine, is in scope.
 Put a short authorization/ethics statement at the top of your report.
+
+
+
+
+
+## AI Usage
+
+I used ChatGPT as an AI assistant during this project. It helped me understand the challenge hints, explain commands and testing steps, troubleshoot issues, understand the vulnerabilities and the application behavior, and organize and review my penetration test report and documentation.
+
+### Claude Code
+
+I launched Claude Code from the project directory using the `claude` command. I used it to help review and understand the provided Vuln Hub project, including the application structure and the purpose of the vulnerabilities.
+
+
+### My Work
+
+I personally ran the Vuln Hub application on my local machine, performed the testing steps, entered the commands and payloads, captured the evidence screenshots, collected the flags, and validated all six flags using `check_flags.py`.
+
+The six vulnerabilities I tested were:
+
+1. SQL Injection
+2. Insecure Direct Object Reference (IDOR)
+3. Stored Cross-Site Scripting (XSS)
+4. Broken Authorization
+5. Path Traversal
+6. Sensitive Data Exposure
+
+I reviewed the results of each test and documented the proof of concept, impact, evidence, and remediation in `pentest_report.md`. I also maintained `submission.txt` with the captured flags and used Git commits to document my progress.
+
+
