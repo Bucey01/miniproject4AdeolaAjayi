@@ -1,3 +1,4 @@
 FLAG{exposure_e5e062073cbc}
 FLAG{idor_5215189d9c72}
 FLAG{traversal_7ed9cb04a65b}
+FLAG{xss_cbf8721b4724}
