@@ -1,4 +1,18 @@
-# Vuln Hub — INF601 Practice Pentest Target
+# Vuln Hub – INF601 Mini Project 4: Penetration Testing
+
+**Student Name:** Adeola Ajayi  
+**Course:** INF601  
+**Institution:** Fort Hays State University  
+**Project:** Mini Project 4 – Cybersecurity Penetration Testing  
+**Date:** October 8, 2026
+
+## Project Overview
+
+This project involved performing penetration testing on the instructor-provided Vuln Hub application in a controlled local environment. The purpose was to identify and demonstrate six web application vulnerabilities, collect the associated flags, and document the findings.
+
+I successfully identified all six vulnerabilities and validated all six captured flags using `check_flags.py`. The testing procedures, screenshots, security impacts, and recommended fixes are documented in `pentest_report.md`.
+
+---
 
 A small, intentionally vulnerable Flask web app. It is the **authorized target**
 for **Mini Project 4 (Cybersecurity track)**. It contains **6 planted
