@@ -116,8 +116,7 @@ I used ChatGPT as an AI assistant during this project. It helped me understand t
 
 ### Claude Code
 
-I launched Claude Code from the project directory using the `claude` command. I used it to help review and understand the provided Vuln Hub project, including the application structure and the purpose of the vulnerabilities.
-
+I launched Claude Code from the project directory using the `claude` command. I used it to help review and understand the provided Vuln Hub project, including the application structure and the purpose of the vulnerabilities. Claude Code was used to help me review the application structure and understand how the vulnerabilities worked. ChatGPT helped me understand the testing process, troubleshoot errors, and organize my documentation. I personally performed the vulnerability tests, entered the commands and payloads, captured screenshots, collected the flags, and verified my results.
 
 ### My Work
 
