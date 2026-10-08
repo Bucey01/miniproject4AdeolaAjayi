@@ -1,7 +1,6 @@
 # Vuln Hub – INF601 Mini Project 4: Penetration Testing
 
-Track: A
-
+**Track:** A  
 **Student Name:** Adeola Ajayi  
 **Course:** INF601  
 **Institution:** Fort Hays State University  
@@ -10,121 +9,69 @@ Track: A
 
 ## Project Overview
 
-This project involved performing penetration testing on the instructor-provided Vuln Hub application in a controlled local environment. The purpose was to identify and demonstrate six web application vulnerabilities, collect the associated flags, and document the findings.
+I conducted penetration testing on the instructor-provided, intentionally vulnerable Vuln Hub Flask application in a controlled local environment. I demonstrated six web application vulnerabilities, collected the associated flags, and validated all six with `check_flags.py`. The exact testing steps, evidence, impacts, and remediation recommendations are in [`pentest_report.md`](pentest_report.md).
 
-I successfully identified all six vulnerabilities and validated all six captured flags using `check_flags.py`. The testing procedures, screenshots, security impacts, and recommended fixes are documented in `pentest_report.md`.
+## Scope and Safety
 
----
+Only the instructor-provided Vuln Hub application running on my own machine was authorized for testing. The application is intentionally insecure and must not be exposed to the public internet. No external systems were tested.
 
-A small, intentionally vulnerable Flask web app. It is the **authorized target**
-for **Mini Project 4 (Cybersecurity track)**. It contains **6 planted
-vulnerabilities**; each one hides a unique `FLAG{...}` you can only read by
-actually exploiting the bug.
+## Run the Application
 
-> ⚠️ **This software is deliberately insecure.** Run it only on your own machine
-> or an isolated lab network. **Never** put it on the public internet. Test
-> **only this app** — nothing else is in scope.
+The `FLAG_SEED` must match the FHSU username (lowercase, without `@fhsu.edu`). For this project, the seed was `abajayi`.
 
----
-
-## Run it
-
-### Your seed
-
-`FLAG_SEED` is **your FHSU username**, lowercase, without `@fhsu.edu`
-(e.g. `jdoe`). It determines your flags. The app lowercases it and ignores any `@fhsu.edu`, so `JDoe` or `jdoe@fhsu.edu` work too. Set it in your shell first:
+### Docker
 
 ```bash
-export FLAG_SEED=jdoe            # bash / zsh (macOS, Linux)
-```
-
-```powershell
-$env:FLAG_SEED="jdoe"            # Windows PowerShell
-```
-
-If you forget: `docker compose` refuses to start and tells you to set `FLAG_SEED`. With `python app.py` or `docker run`, the app starts anyway but prints a warning, shows a red "DEFAULT seed" banner on every page, and uses a default seed whose flags are NOT valid for your username.
-
-### Option A — Docker (recommended)
-
-```bash
+export FLAG_SEED=abajayi
 docker compose up --build
-# or, plain docker:
+```
+
+Alternatively, build and run the image directly:
+
+```bash
 docker build -t inf601-vulnhub .
-docker run -p 127.0.0.1:5000:5000 -e FLAG_SEED=jdoe inf601-vulnhub
+docker run -p 127.0.0.1:5000:5000 -e FLAG_SEED=abajayi inf601-vulnhub
 ```
 
-### Option B — Python venv
+### Python virtual environment
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate        # Windows: .venv\Scripts\activate
+export FLAG_SEED=abajayi
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
-python app.py                    # uses the FLAG_SEED you set above
+python3 app.py
 ```
 
-Then open <http://127.0.0.1:5000>. A public test account is
-`alice / password123` (you need a normal session for some challenges).
+Open <http://127.0.0.1:5000>. The provided normal test account is `alice / password123`. On macOS, if port 5000 is occupied, use `PORT=5001 python3 app.py` and open <http://127.0.0.1:5001>.
 
-> **macOS:** port 5000 is often taken by AirPlay Receiver. Use another port:
-> `PORT=5001 python app.py`, or `docker run -p 127.0.0.1:5001:5000 -e FLAG_SEED=jdoe inf601-vulnhub`,
-> then open <http://127.0.0.1:5001>.
+## Findings
 
-> The flags also exist as plain files and database rows on your own machine, so
-> finding them that way proves nothing. **Only flags whose exploit appears in
-> your PoC earn credit.**
+| Finding | Vulnerability | Severity |
+| --- | --- | --- |
+| 1 | Exposed database backup (sensitive data exposure) | High |
+| 2 | Insecure Direct Object Reference (IDOR) | High |
+| 3 | Path traversal in the download endpoint | High |
+| 4 | Stored Cross-Site Scripting (XSS) | High |
+| 5 | Broken authorization via forgeable cookie | High |
+| 6 | SQL injection in the login form | Critical |
 
----
+See [`pentest_report.md`](pentest_report.md) for proof-of-concept details and screenshots. The captured flags are in [`submission.txt`](submission.txt), one per line.
 
-## The 6 challenges
-
-Each is a different, common web vulnerability. Start at the home page — it has a
-short hint for each.
-
-1. **SQL injection** — bypass the login form.
-2. **IDOR** — read a message that isn't yours.
-3. **Stored XSS** — steal the admin's cookie via the guestbook.
-4. **Broken authorization** — reach `/vault` (superadmins only).
-5. **Path traversal** — make the `/download` endpoint serve a file it shouldn't.
-6. **Sensitive data exposure** — find a file that was left exposed (start with `/robots.txt`).
-
-You are encouraged to **drive the exploration with Claude Code** — that is the
-point of the project. Capture each `FLAG{...}` you find.
-
----
-
-## What to submit (per the MP4 rubric)
-
-A GitHub repo named `miniproject4YourFullName` containing:
-
-1. **`submission.txt`** — each captured flag on its own line.
-2. A **Proof-of-Concept** for each finding (the exact request / payload /
-   command / screenshot that captured the flag).
-3. A **pentest report** (Markdown or PDF) with, for each finding: the
-   vulnerability class, severity, how you found and exploited it, evidence, and
-   **remediation** advice. Include a scope + **authorization statement** at the top.
-4. A **README** with an **`## AI Usage`** section (what Claude Code did vs. what
-   you did — you must be able to explain every step at the Week 16 review).
-
-### Check your flags
+## Validate the Flags
 
 ```bash
-python check_flags.py submission.txt --username jdoe
+python3 check_flags.py submission.txt --username abajayi
 ```
 
-This prints `VALID` / `NOT VALID` for each line. It awards no points: each
-flag counts only if your report's PoC shows the exploit that produced it.
+My recorded validation result was **6/6 valid flags**. The checker confirms the flag values; credit for each finding also depends on the report's proof of concept.
 
----
+## Submission Contents
 
-## Scope & ethics
-
-Testing systems you are not authorized to test is an academic-honesty and
-conduct violation. **Only** this app, running on **your** machine, is in scope.
-Put a short authorization/ethics statement at the top of your report.
-
-
-
-
+- `README.md` — project overview, setup, results, and AI usage disclosure
+- `pentest_report.md` — authorized scope, six findings, proof of concept, evidence, impacts, and remediation
+- `submission.txt` — six captured flags
+- `screenshots/` — screenshots referenced by the README and report
 
 ## AI Usage
 
@@ -132,21 +79,47 @@ I used ChatGPT as an AI assistant during this project. It helped me understand t
 
 ### Claude Code
 
-I launched Claude Code from the project directory using the `claude` command. I used it to help review and understand the provided Vuln Hub project, including the application structure and the purpose of the vulnerabilities. Claude Code was used to help me review the application structure and understand how the vulnerabilities worked. ChatGPT helped me understand the testing process, troubleshoot errors, and organize my documentation. I personally performed the vulnerability tests, entered the commands and payloads, captured screenshots, collected the flags, and verified my results.
+I launched Claude Code from the project directory using the `claude` command. I used it to review the provided Vuln Hub project, including its application structure and vulnerabilities. ChatGPT helped me understand the testing process, troubleshoot errors, and organize my documentation. I personally performed the vulnerability tests, entered the commands and payloads, captured screenshots, collected the flags, and verified my results.
+
+### Agentic Workflow (Goal → Tool Calls → Review)
+
+**Goal:** My goal was to identify, understand and demonstrate the six vulnerabilities in the instructor-provided Vuln Hub application and document how they could be exploited in the authorized local environment.
+
+**Tool Calls:** I used Claude Code to independently inspect the Vuln Hub application's source code, focusing on the database backup functionality. Claude Code executed two shell commands during its read-only review and examined application files, including `app.py`. It identified security weaknesses involving missing authentication, sensitive backup file exposure, and potential path traversal. It also provided remediation recommendations. I separately performed the HTTP testing, reviewed the application's responses, captured screenshots, and documented my findings.
+
+**Review:** I reviewed the explanations and guidance provided by Claude Code and used them to understand the vulnerabilities. I personally entered the testing commands and payloads, examined the application's responses, and captured screenshots as evidence. I collected all six flags and validated them using `check_flags.py`.
+
+**Outcome:** I successfully identified and documented all six vulnerabilities. I recorded the proof-of-concept steps, screenshots, security impacts, and remediation recommendations in `pentest_report.md`. All six captured flags were successfully validated.
+
+### Claude Code Review Evidence
+
+Claude Code also provided remediation recommendations, including restricting access to backup files, storing sensitive backups outside publicly accessible directories, and implementing proper authentication and authorization controls.
+
+During the initial attempt to request independent HTTP testing, the Claude Code session was paused by its safeguards. I continued with a read-only source-code review instead. Claude Code successfully inspected the application files and provided findings and remediation recommendations without modifying the application.
+
+I reviewed the findings and separately performed HTTP testing using `curl` against the locally running application. The HTTP responses confirmed that the database backup was accessible without authentication.
+
+The following screenshots document my interaction with Claude Code, its source-code review, identified vulnerabilities, and remediation recommendations.
+
+**Claude Code Source-Code Review**
+
+![Claude Code Source-Code Review](screenshots/claude-agentic-code-review.png)
+
+**Claude Code Identified Vulnerabilities**
+
+![Claude Code Identified Vulnerabilities](screenshots/claude-agentic-vulnerabilities.png)
+
+**Claude Code Remediation Recommendations**
+
+![Claude Code Remediation Recommendations](screenshots/claude-agentic-remediation.png)
+
+**Claude Code Initial Session Pause**
+
+![Claude Code Session Paused](screenshots/claude-session-paused.png)
+
 
 ### My Work
 
 I personally ran the Vuln Hub application on my local machine, performed the testing steps, entered the commands and payloads, captured the evidence screenshots, collected the flags, and validated all six flags using `check_flags.py`.
 
-The six vulnerabilities I tested were:
-
-1. SQL Injection
-2. Insecure Direct Object Reference (IDOR)
-3. Stored Cross-Site Scripting (XSS)
-4. Broken Authorization
-5. Path Traversal
-6. Sensitive Data Exposure
-
 I reviewed the results of each test and documented the proof of concept, impact, evidence, and remediation in `pentest_report.md`. I also maintained `submission.txt` with the captured flags and used Git commits to document my progress.
-
-
