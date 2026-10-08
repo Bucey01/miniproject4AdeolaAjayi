@@ -1,4 +1,8 @@
 # INF601 - Advanced Programming in Python
+# Adeola Ajayi
+# Mini Project 4
+
+# # INF601 - Advanced Programming in Python
 # Practice Pentest Target ("Vuln Hub") - INSTRUCTOR-PROVIDED CTF TARGET
 #
 # !!! INTENTIONALLY VULNERABLE SOFTWARE !!!

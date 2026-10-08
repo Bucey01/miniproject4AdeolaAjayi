@@ -1,4 +1,8 @@
 # INF601 - Advanced Programming in Python
+# Adeola Ajayi
+# Mini Project 4
+
+# # INF601 - Advanced Programming in Python
 # Self-check for the Vuln Hub pentest target (Mini Project 4, Track A).
 #
 # Checks each flag in your submission file against the flags Vuln Hub
